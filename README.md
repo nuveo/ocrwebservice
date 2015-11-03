@@ -3,7 +3,7 @@
 
 ### Install
 
-`go get github.com/poorny/ocrwebservice.go`
+`go get github.com/poorny/ocrwebservice`
 
 
 ### Usage
@@ -18,7 +18,7 @@ package main
 import (
 	"fmt"
 
-  "github.com/poorny/ocrwebservice.go"
+  "github.com/poorny/ocrwebservice"
 )
 
 func main() {
