@@ -17,11 +17,13 @@ const (
 	ocrURL = "http://www.ocrwebservice.com/restservices/processDocument?gettext=true"
 )
 
+// Config struct with LicenseCode and UserName
 type Config struct {
 	LicenseCode string `json:"license_code"`
 	UserName    string `json:"username"`
 }
 
+// Response is struct representing response of ocrwebservice.
 type Response struct {
 	ErrorMessage    string     `json:"ErrorMessage"`
 	AvailablePages  int        `json:"AvailablePages"`
@@ -31,6 +33,7 @@ type Response struct {
 	Reserved        []string   `json:"Reserved"`
 }
 
+// Setup get LICENSE CODE and Username vars of environment.
 func (c *Config) Setup() error {
 	license := os.Getenv("LICENSE_CODE")
 	username := os.Getenv("USERNAME")
@@ -82,6 +85,7 @@ func newfileUploadRequest(uri, path string) (*http.Request, error) {
 	return request, err
 }
 
+// OcrWs its main function of package
 func OcrWs(pathFile string, language string) (Response, error) {
 	conf := Config{}
 	err := conf.Setup()
@@ -120,9 +124,15 @@ func OcrWs(pathFile string, language string) (Response, error) {
 		log.Println(err)
 		return Response{}, err
 	}
+
+	if resp.StatusCode != 200 {
+		return Response{}, errors.New(r.ErrorMessage)
+	}
+
 	return r, err
 }
 
+// Text method return Text Recognized coming Response
 func (r *Response) Text() string {
 	var text []string
 
